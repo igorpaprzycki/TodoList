@@ -23,6 +23,11 @@ public class TodoTaskAdapter extends RecyclerView.Adapter<TodoTaskAdapter.TodoVi
         this.mTasks = mTasks;
     }
 
+    public void setTasks(List<TodoTask> tasks) {
+        this.mTasks = tasks;
+        notifyDataSetChanged(); //refresh the data on the screen, use this method in setters of Adapter class
+    }
+
     @Override
     public TodoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());

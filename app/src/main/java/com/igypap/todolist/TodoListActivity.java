@@ -8,15 +8,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TodoListActivity extends AppCompatActivity {
     @BindView(R.id.tasks_list)
     RecyclerView mTodoList;
+
+    private ITaskDatabase mTaskDatabase = new MemoryTaskDatabase();
+    private TodoTaskAdapter mAdapter;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAdapter.setTasks(mTaskDatabase.getTasks());
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -44,18 +50,8 @@ public class TodoListActivity extends AppCompatActivity {
         //1. Layout of to do ist elements (linear vertical)
         mTodoList.setLayoutManager(new LinearLayoutManager(this));
 
-        List<TodoTask> tasks = new LinkedList<>();
-        TodoTask task = new TodoTask();
-        task.setName("Zadanie 1");
-        tasks.add(task);
-
-        task = new TodoTask();
-        task.setDone(true);
-        task.setName("Zadanie 1");
-        tasks.add(task);
-
-        TodoTaskAdapter adapter = new TodoTaskAdapter(tasks);
-        mTodoList.setAdapter(adapter);
+        mAdapter = new TodoTaskAdapter(mTaskDatabase.getTasks());
+        mTodoList.setAdapter(mAdapter);
         //mTodoList.setAdapter(listAdapter);
     }
 }

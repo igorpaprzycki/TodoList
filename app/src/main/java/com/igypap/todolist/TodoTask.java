@@ -32,7 +32,7 @@ public class TodoTask {
         return done;
     }
 
-    public void setDone(Boolean done) {
+    public void setDone(boolean done) {
         this.done = done;
     }
 
