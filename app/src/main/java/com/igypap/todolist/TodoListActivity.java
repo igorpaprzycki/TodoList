@@ -64,4 +64,12 @@ public class TodoListActivity extends AppCompatActivity
         startActivity(createTaskIntent);
         //Toast.makeText(this, "Klik" + position, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onTaskDoneChanged(TodoTask task, int position, boolean isDone) {
+        task.setDone(isDone);
+        mTaskDatabase.updateTask(task,position);
+    }
+
+
 }

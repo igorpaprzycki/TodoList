@@ -11,6 +11,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 /**
@@ -45,10 +46,13 @@ public class TodoTaskAdapter extends RecyclerView.Adapter<TodoTaskAdapter.TodoVi
         //1. Pobranie elementu danych na pozycji position
         TodoTask task = mTasks.get(position);
         //2. Uzupelnienie widoku (holder) na podstawie pobranego obiektu
-        holder.mTitle.setText(task.getName());
-        holder.mDone.setChecked(task.isDone());
+        holder.mBlockListeners = true; //block the events of item or checkbox click
         holder.mCurrentPosition = position;
         holder.mCurrentTask = task;
+        holder.mTitle.setText(task.getName());
+        holder.mDone.setChecked(task.isDone());
+        holder.mBlockListeners = false; //unblock events of item or checkbox click
+
 
     }
 
@@ -58,32 +62,46 @@ public class TodoTaskAdapter extends RecyclerView.Adapter<TodoTaskAdapter.TodoVi
         return mTasks.size();
     }
 
-    public interface OnClickListener {
-        //method invoking when user clicks on RecyclerView element (row)
-        void onClick(TodoTask task, int position);
-    }
-
     public class TodoViewHolder extends RecyclerView.ViewHolder {
+
         //only once find the elements and assign to variables:
         @BindView(R.id.task_done)
         CheckBox mDone;
         @BindView(R.id.task_title)
         TextView mTitle;
-
         TodoTask mCurrentTask;
+
         int mCurrentPosition;
+        //Block the checkbox listener; True because when the row is created
+        //dont need to run method
+        boolean mBlockListeners = true;
 
         public TodoViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-
         @OnClick
         void onItemClick() {
-            if (mClickListener != null) {
+            if (mClickListener != null && !mBlockListeners) {
                 mClickListener.onClick(mCurrentTask, mCurrentPosition);
             }
         }
+
+        @OnCheckedChanged(R.id.task_done)
+        void onCheckedChange(boolean checked) {
+            if (mClickListener != null && !mBlockListeners) {
+                mClickListener.onTaskDoneChanged(mCurrentTask, mCurrentPosition, checked);
+            }
+        }
+
+
+    }
+
+    public interface OnClickListener {
+        //method invoking when user clicks on RecyclerView element (row)
+        void onClick(TodoTask task, int position);
+
+        void onTaskDoneChanged(TodoTask task, int position, boolean isDone);
     }
 }
