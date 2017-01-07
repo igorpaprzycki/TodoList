@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,6 +59,9 @@ public class TodoListActivity extends AppCompatActivity
 
     @Override
     public void onClick(TodoTask task, int position) {
-        Toast.makeText(this, "Klik" + position, Toast.LENGTH_SHORT).show();
+        Intent createTaskIntent = new Intent(this,TaskCreateActivity.class);
+        createTaskIntent.putExtra("pos",position);
+        startActivity(createTaskIntent);
+        //Toast.makeText(this, "Klik" + position, Toast.LENGTH_SHORT).show();
     }
 }

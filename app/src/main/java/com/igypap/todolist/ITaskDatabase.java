@@ -10,4 +10,8 @@ public interface ITaskDatabase {
     List<TodoTask> getTasks();
 
     void addTask(TodoTask task);
+
+    TodoTask getTask(int position);
+
+    void updateTask(TodoTask task, int position);
 }
