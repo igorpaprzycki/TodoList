@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -22,6 +24,10 @@ public class TodoListActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        refreshListData();
+    }
+
+    private void refreshListData() {
         mAdapter.setTasks(mTaskDatabase.getTasks());
     }
 
@@ -68,7 +74,9 @@ public class TodoListActivity extends AppCompatActivity
     @Override
     public void onTaskDoneChanged(TodoTask task, int position, boolean isDone) {
         task.setDone(isDone);
+        task.setDateCreated(new Date());
         mTaskDatabase.updateTask(task,position);
+        refreshListData();
     }
 
 

@@ -33,6 +33,24 @@
             android:inputType="textCapSentences|textMultiLine"
             android:minLines="3" />
 
+        <CheckBox
+            android:id="@+id/task_reminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ustaw alarm"/>
+
+        <DatePicker
+            android:id="@+id/task_reminder_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+        <TimePicker
+            android:id="@+id/task_reminder_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
         <Button
             android:id="@+id/btn_save"
             android:layout_width="match_parent"

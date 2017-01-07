@@ -21,6 +21,10 @@ public class TodoTask {
     private boolean done;
     @DatabaseField(canBeNull = false)
     private Date dateCreated;
+    @DatabaseField(canBeNull = false)
+    private boolean reminder;
+    @DatabaseField
+    private Date reminderDate;
 
     public int getId() {
         return id;
@@ -60,5 +64,21 @@ public class TodoTask {
 
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public boolean isReminder() {
+        return reminder;
+    }
+
+    public void setReminder(boolean reminder) {
+        this.reminder = reminder;
+    }
+
+    public Date getReminderDate() {
+        return reminderDate;
+    }
+
+    public void setReminderDate(Date reminderDate) {
+        this.reminderDate = reminderDate;
     }
 }

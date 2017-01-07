@@ -32,7 +32,10 @@ public class SqliteTaskDatabase implements ITaskDatabase {
     @Override
     public List<TodoTask> getTasks() {
         try {
-            return mDao.queryForAll();
+            return mDao.queryBuilder()
+                    .orderBy("done",true)
+                    .orderBy("dateCreated",false)
+                    .query();
         } catch (SQLException e) {
             e.printStackTrace();
         }

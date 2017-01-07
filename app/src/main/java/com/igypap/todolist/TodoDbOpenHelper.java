@@ -15,7 +15,7 @@ import java.sql.SQLException;
 
 public class TodoDbOpenHelper extends OrmLiteSqliteOpenHelper {
     public static final String DATABASE_NAME = "todo.DB";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     public TodoDbOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -32,5 +32,11 @@ public class TodoDbOpenHelper extends OrmLiteSqliteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
+        //change the database from version 1 to version 2 with additional columns for reminder date
+        if (oldVersion == 1 && newVersion == 2){
+            database.execSQL("ALTER TABLE todo_task ADD COLUMN reminder BOOLEAN NOT NULL DEFAULT 0");
+            database.execSQL("ALTER TABLE todo_task ADD COLUMN reminderDate TEXT");
+
+        }
     }
 }
