@@ -42,6 +42,7 @@ public class TaskCreateActivity extends AppCompatActivity {
         getSupportActionBar()
                 .setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
+        mTaskReminderTime.setIs24HourView(true);
         mTaskDatabase = new SqliteTaskDatabase(this);
         if (getIntent().hasExtra("pos")) {
             mPosition = getIntent().getIntExtra("pos", -1);
@@ -49,9 +50,24 @@ public class TaskCreateActivity extends AppCompatActivity {
 
             mTaskTitle.setText(mTask.getName());
             mTaskNote.setText(mTask.getNote());
-            mTaskReminder.setChecked(mTask.isReminder());
+            if (mTask.isReminder()) {
+                mTaskReminder.setChecked(true);
+                Calendar reminderCalendar = Calendar.getInstance();
+                reminderCalendar.setTime(mTask.getReminderDate());
+                mTaskReminderDate.init(reminderCalendar.get(Calendar.YEAR),
+                        reminderCalendar.get(Calendar.MONTH),
+                        reminderCalendar.get(Calendar.DAY_OF_MONTH), null);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    mTaskReminderTime.setMinute(reminderCalendar.get(Calendar.MINUTE));
+                    mTaskReminderTime.setHour(reminderCalendar.get(Calendar.HOUR_OF_DAY));
+                }else{
+                    mTaskReminderTime.setCurrentMinute(reminderCalendar.get(Calendar.MINUTE));
+                    mTaskReminderTime.setCurrentHour(reminderCalendar.get(Calendar.HOUR_OF_DAY));
+                }
+            }
         }
     }
+
 
     @OnCheckedChanged(R.id.task_reminder)
     void onReminderChecked(boolean checked) {
