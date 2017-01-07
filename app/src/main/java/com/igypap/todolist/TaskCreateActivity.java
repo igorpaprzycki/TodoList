@@ -16,7 +16,7 @@ public class TaskCreateActivity extends AppCompatActivity {
     EditText mTaskTitle;
     @BindView(R.id.task_note)
     EditText mTaskNote;
-    private ITaskDatabase mTaskDatabase = new MemoryTaskDatabase();
+    private ITaskDatabase mTaskDatabase;
     private int mPosition = -1;
     private TodoTask mTask;
 
@@ -27,6 +27,7 @@ public class TaskCreateActivity extends AppCompatActivity {
         getSupportActionBar()
                 .setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
+        mTaskDatabase = new SqliteTaskDatabase(this);
         if (getIntent().hasExtra("pos")) {
             mPosition = getIntent().getIntExtra("pos", -1);
             mTask = mTaskDatabase.getTask(mPosition);

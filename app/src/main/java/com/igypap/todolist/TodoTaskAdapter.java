@@ -47,7 +47,7 @@ public class TodoTaskAdapter extends RecyclerView.Adapter<TodoTaskAdapter.TodoVi
         TodoTask task = mTasks.get(position);
         //2. Uzupelnienie widoku (holder) na podstawie pobranego obiektu
         holder.mBlockListeners = true; //block the events of item or checkbox click
-        holder.mCurrentPosition = position;
+        holder.mCurrentPosition = task.getId();
         holder.mCurrentTask = task;
         holder.mTitle.setText(task.getName());
         holder.mDone.setChecked(task.isDone());

@@ -16,7 +16,7 @@ public class TodoListActivity extends AppCompatActivity
     @BindView(R.id.tasks_list)
     RecyclerView mTodoList;
 
-    private ITaskDatabase mTaskDatabase = new MemoryTaskDatabase();
+    private ITaskDatabase mTaskDatabase;
     private TodoTaskAdapter mAdapter;
 
     @Override
@@ -46,7 +46,7 @@ public class TodoListActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_list);
         ButterKnife.bind(this);
-
+        mTaskDatabase = new SqliteTaskDatabase(this);
 
         //1. Layout of to do list elements (linear vertical)
         //1 element per row
