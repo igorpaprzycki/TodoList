@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -99,6 +100,11 @@ public class TaskCreateActivity extends AppCompatActivity {
                     mTaskReminderDate.getDayOfMonth(),
                     hour, minute);
 
+            if (reminderCalendar.before(Calendar.getInstance())){
+                Toast.makeText(this, "Wprowadzono przeszłą datę. Popraw dane.",Toast.LENGTH_LONG)
+                        .show();
+                return;
+            }
             task.setReminderDate(reminderCalendar.getTime());
         }
 
