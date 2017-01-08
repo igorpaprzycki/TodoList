@@ -1,4 +1,4 @@
-package com.igypap.todolist;
+package com.igypap.todolist.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.igypap.todolist.NotificationsPlanner;
+import com.igypap.todolist.database.ITaskDatabase;
+import com.igypap.todolist.R;
+import com.igypap.todolist.database.SqliteTaskDatabase;
+import com.igypap.todolist.model.TodoTask;
+import com.igypap.todolist.adapter.TodoTaskAdapter;
 
 import java.util.Date;
 
@@ -25,6 +32,8 @@ public class TodoListActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         refreshListData();
+        //update notifications in the Android`s AlarmManager:
+        new NotificationsPlanner(mTaskDatabase, this).planNotifications();
     }
 
     private void refreshListData() {
@@ -65,8 +74,8 @@ public class TodoListActivity extends AppCompatActivity
 
     @Override
     public void onClick(TodoTask task, int position) {
-        Intent createTaskIntent = new Intent(this,TaskCreateActivity.class);
-        createTaskIntent.putExtra("pos",position);
+        Intent createTaskIntent = new Intent(this, TaskCreateActivity.class);
+        createTaskIntent.putExtra("pos", position);
         startActivity(createTaskIntent);
         //Toast.makeText(this, "Klik" + position, Toast.LENGTH_SHORT).show();
     }
@@ -75,7 +84,7 @@ public class TodoListActivity extends AppCompatActivity
     public void onTaskDoneChanged(TodoTask task, int position, boolean isDone) {
         task.setDone(isDone);
         task.setDateCreated(new Date());
-        mTaskDatabase.updateTask(task,position);
+        mTaskDatabase.updateTask(task, position);
         refreshListData();
     }
 

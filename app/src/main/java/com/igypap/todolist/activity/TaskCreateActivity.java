@@ -1,4 +1,4 @@
-package com.igypap.todolist;
+package com.igypap.todolist.activity;
 
 import android.annotation.TargetApi;
 import android.os.Build;
@@ -11,6 +11,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.igypap.todolist.R;
+import com.igypap.todolist.database.ITaskDatabase;
+import com.igypap.todolist.database.SqliteTaskDatabase;
+import com.igypap.todolist.model.TodoTask;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -61,7 +66,7 @@ public class TaskCreateActivity extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     mTaskReminderTime.setMinute(reminderCalendar.get(Calendar.MINUTE));
                     mTaskReminderTime.setHour(reminderCalendar.get(Calendar.HOUR_OF_DAY));
-                }else{
+                } else {
                     mTaskReminderTime.setCurrentMinute(reminderCalendar.get(Calendar.MINUTE));
                     mTaskReminderTime.setCurrentHour(reminderCalendar.get(Calendar.HOUR_OF_DAY));
                 }
@@ -100,8 +105,8 @@ public class TaskCreateActivity extends AppCompatActivity {
                     mTaskReminderDate.getDayOfMonth(),
                     hour, minute);
 
-            if (reminderCalendar.before(Calendar.getInstance())){
-                Toast.makeText(this, "Wprowadzono przeszłą datę. Popraw dane.",Toast.LENGTH_LONG)
+            if (reminderCalendar.before(Calendar.getInstance())) {
+                Toast.makeText(this, "Wprowadzono przeszłą datę. Popraw dane.", Toast.LENGTH_SHORT)
                         .show();
                 return;
             }

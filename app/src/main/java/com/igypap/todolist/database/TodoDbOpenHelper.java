@@ -1,8 +1,9 @@
-package com.igypap.todolist;
+package com.igypap.todolist.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.igypap.todolist.model.TodoTask;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
