@@ -18,5 +18,7 @@ public interface ITaskDatabase {
 
     void updateTask(TodoTask task, int position);
 
+    void deleteTask(TodoTask task);
+
     List<TodoTask> getFutureTasksWithReminder(Date now);
 }

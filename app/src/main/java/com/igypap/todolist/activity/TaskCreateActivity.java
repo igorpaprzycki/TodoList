@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -25,6 +26,8 @@ import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
+import static android.os.Build.VERSION_CODES.M;
+
 public class TaskCreateActivity extends AppCompatActivity {
     @BindView(R.id.task_title)
     EditText mTaskTitle;
@@ -37,9 +40,22 @@ public class TaskCreateActivity extends AppCompatActivity {
     @BindView(R.id.task_reminder_time)
     TimePicker mTaskReminderTime;
 
+    MenuItem mMenuDelete;
+
     private ITaskDatabase mTaskDatabase;
     private int mPosition = -1;
     private TodoTask mTask;
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_delete, menu);
+        if (mTask == null) {
+            menu.findItem(R.id.menu_item_delete).setVisible(false);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +64,7 @@ public class TaskCreateActivity extends AppCompatActivity {
         getSupportActionBar()
                 .setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
+        mMenuDelete = (MenuItem) findViewById(R.id.menu_item_delete);
         mTaskReminderTime.setIs24HourView(true);
         mTaskDatabase = new SqliteTaskDatabase(this);
         if (getIntent().hasExtra("pos")) {
@@ -63,7 +80,7 @@ public class TaskCreateActivity extends AppCompatActivity {
                 mTaskReminderDate.init(reminderCalendar.get(Calendar.YEAR),
                         reminderCalendar.get(Calendar.MONTH),
                         reminderCalendar.get(Calendar.DAY_OF_MONTH), null);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT >= M) {
                     mTaskReminderTime.setMinute(reminderCalendar.get(Calendar.MINUTE));
                     mTaskReminderTime.setHour(reminderCalendar.get(Calendar.HOUR_OF_DAY));
                 } else {
@@ -82,7 +99,7 @@ public class TaskCreateActivity extends AppCompatActivity {
     }
 
 
-    @TargetApi(Build.VERSION_CODES.M)
+    @TargetApi(M)
     @OnClick(R.id.btn_save)
     void onSaveClick() {
         TodoTask task = mTask != null ? mTask : new TodoTask();
@@ -92,10 +109,10 @@ public class TaskCreateActivity extends AppCompatActivity {
         task.setReminder(mTaskReminder.isChecked());
         if (task.isReminder()) {
             //getHour() is available since API 23, our minimal is 19
-            int hour = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ?
+            int hour = Build.VERSION.SDK_INT >= M ?
                     mTaskReminderTime.getHour() :
                     mTaskReminderTime.getCurrentHour();
-            int minute = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ?
+            int minute = Build.VERSION.SDK_INT >= M ?
                     mTaskReminderTime.getMinute() :
                     mTaskReminderTime.getCurrentMinute();
             Calendar reminderCalendar = Calendar.getInstance();
@@ -128,6 +145,11 @@ public class TaskCreateActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
+        } else if (item.getItemId() == R.id.menu_item_delete) {
+            mTaskDatabase.deleteTask(mTask);
+            Toast.makeText(this, "Zadanie " + mTask.getName() + " usunięte!", Toast.LENGTH_SHORT)
+                    .show();
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

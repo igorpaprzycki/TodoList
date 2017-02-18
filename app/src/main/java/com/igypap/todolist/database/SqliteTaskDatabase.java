@@ -73,6 +73,15 @@ public class SqliteTaskDatabase implements ITaskDatabase {
     }
 
     @Override
+    public void deleteTask(TodoTask task) {
+        try {
+            mDao.delete(task);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public List<TodoTask> getFutureTasksWithReminder(Date now) {
         try {
             return mDao.queryBuilder()
